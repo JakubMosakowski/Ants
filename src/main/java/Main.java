@@ -5,55 +5,54 @@ import java.awt.*;
 
 class Main{
     static final String APP_NAME="Anthill";
+    static Anthill anthill;
 	public static void main(String arg[]){
-        getScreenSize();
-        setJFrame();
+        fillMaxClass();
+        anthill=new Anthill();
+        runningJFrame();
 
 
-		/*
-
-		Anthill anthill=new Anthill(Max.MAX_X/2,Max.MAX_Y/2);
-
-		while(!ants[0].antDies()){
-			anthill.print();
-			for(int i=0;i<Max.MAX_ANTS;i++){
-				anthill.changePath(ants[i].getX(),ants[i].getY(),2);
-				ants[i].move();
-				anthill.changePath(ants[i].getX(),ants[i].getY(),1);
-			}
-			System.out.println("It's ants "+ants[0].getMove()+" move!");
-			try{
-				System.in.read();
-			}
-			catch (IOException e){
-				e.printStackTrace();
-			}
-		}
-		System.out.println("Your ants died.");*/
 	}
 
-    private static void setJFrame() {
+    private static void runningJFrame() {
         Runnable r = new Runnable() {
             public void run() {
-                Board cb = new Board();
+                Board b = new Board();
                 JFrame f = new JFrame(APP_NAME);
-                f.add(cb.getGui());
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                f.setLocationByPlatform(true);
-                f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                f.pack();
-                f.setMinimumSize(f.getSize());
-                f.setVisible(true);
+
+                setJFrame(b, f);
+
+                nextTurn(b, f);
+
             }
         };
         SwingUtilities.invokeLater(r);
     }
 
-    private static void getScreenSize() {
+    private static void nextTurn(Board b, JFrame f) {
+        //TODO jakis system tur niech sie rusza, podadzą do board nową tablice tagów
+        f.remove(b.getGui());
+        anthill.moveAnts();
+        b.showNewTurn();
+        f.add(b.getGui());
+    }
+
+    private static void setJFrame(Board b, JFrame f) {
+        f.add(b.getGui());
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.setLocationByPlatform(true);
+        f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        f.pack();
+        f.setMinimumSize(f.getSize());
+        f.setVisible(true);
+    }
+
+
+    private static void fillMaxClass() {
         Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
         double panelHeight=screenSize.getHeight();
         double panelWidth=screenSize.getWidth();
-        Max.setMax((int)Math.round(panelWidth),(int)Math.round(panelHeight),300,30);
+        Max.setMax((int)Math.round(panelWidth),(int)Math.round(panelHeight),10,300,30,5);
     }
 
 

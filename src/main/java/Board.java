@@ -1,63 +1,85 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-class Board{
+class Board {
 
-	private final JPanel gui = new JPanel(new BorderLayout(3, 3));
-	private final int SIZE=30;
-	private JLabel[][] boardSquares = new JLabel[SIZE][SIZE];
-	private JPanel board;
+    private final JPanel gui = new JPanel(new BorderLayout(3, 3));
 
-	Board() {
-		initializeGui();
-	}
+    private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
+    static char[][] boardSquaresTags = new char[Max.SIZE][Max.SIZE];
+    private JPanel board;
 
-	public final void initializeGui() {
-		board = new JPanel(new GridLayout(0, SIZE));
+    Board() {
+        initializeGui();
+    }
+
+
+    private final void initializeGui() {
+        board = new JPanel(new GridLayout(0, Max.SIZE));
         setToolbar();
         createEmptySquares();
         fillBoard();
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
-        gui.add(board);
+
     }
 
     private void createEmptySquares() {
-        for (int ii = 0; ii < boardSquares.length; ii++) {
-            for (int jj = 0; jj < boardSquares[ii].length; jj++) {
+        for (int i = 0; i < boardSquares.length; i++) {
+            for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                ImageIcon icon = new ImageIcon(
-                        new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB));
-                b.setIcon(icon);
-                b.setBorder(new LineBorder(Color.BLACK));
-                boardSquares[jj][ii] = b;
+                squareEmpty(b);
+
+                boardSquares[j][i] = b;
+                boardSquaresTags[j][i] = 'E';
+                //TODO remove that,just for checking
+                if ((i + j) % 10 == 0)
+                    squareWithAnt(b);
+                else if ((i + j) % 10 == 8)
+                    squareWithAntQueen(b);
+                else if ((i + j) % 10 == 5)
+                    squareWithLeaf(b);
             }
         }
     }
-    private void squareWithAnt(JLabel square){
-	    ImageIcon icon =new ImageIcon(ClassLoader.getSystemResource( "icons/Ant.png" ));
-	    square.setIcon(icon);
+    private void squareEmpty(JLabel b) {
+        ImageIcon icon = new ImageIcon(
+                new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB));
+        b.setIcon(icon);
     }
 
-    private void squareWithAntQueen(JLabel square){
-        ImageIcon icon =new ImageIcon(ClassLoader.getSystemResource( "icons/AntQueen.png" ));
+    private void squareWithAnt(JLabel square) {
+        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Ant.png"));
         square.setIcon(icon);
     }
 
-    private void squareWithLeaf(JLabel square){
-        ImageIcon icon =new ImageIcon(ClassLoader.getSystemResource( "icons/Leaf.png" ));
+    private void squareWithAntQueen(JLabel square) {
+        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/AntQueen.png"));
+        square.setIcon(icon);
+    }
+
+    private void squareWithLeaf(JLabel square) {
+        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Leaf.png"));
+        square.setIcon(icon);
+    }
+
+    private void squareWithAnthill(JLabel square) {
+        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Anthill.png"));
         square.setIcon(icon);
     }
 
     private void fillBoard() {
-        for (int ii = 0; ii < SIZE; ii++) {
-            for (int jj = 0; jj < SIZE; jj++) {
-                 board.add(boardSquares[jj][ii]);
+        gui.remove(board);
+        board.removeAll();
+
+        for (int ii = 0; ii < Max.SIZE; ii++) {
+            for (int jj = 0; jj < Max.SIZE; jj++) {
+                board.add(boardSquares[jj][ii]);
             }
         }
+        gui.add(board);
     }
 
     private void setToolbar() {
@@ -75,12 +97,45 @@ class Board{
         tools.addSeparator();
     }
 
-    public final JComponent getBoard() {
-		return board;
-	}
+     void showNewTurn() {
+        for (int i = 0; i < boardSquares.length; i++) {
+            for (int j = 0; j < boardSquares[i].length; j++) {
+                JLabel b = new JLabel();
+                b.setOpaque(true);
 
-	public final JComponent getGui() {
-		return gui;
-	}
+                if (boardSquaresTags[i][j] == 'E') {
+                    squareEmpty(b);//TODO ma pokazywac puste, tylko test
+                    //squareWithAnt(b);
+                    //System.out.println(i+"|"+j);
+                } else if (boardSquaresTags[i][j] == 'A')
+                    squareWithAnt(b);
+                else if (boardSquaresTags[i][j] == 'H')
+                    squareWithAnthill(b);
+                else if (boardSquaresTags[i][j] == 'L')
+                    squareWithLeaf(b);
+                else
+                    squareWithAntQueen(b);
+
+                boardSquares[j][i] = b;
+
+                //TODO remove that,just for checking
+
+            }
+
+        }
+        fillBoard();
+
+    }
+
+
+
+
+    public final JComponent getBoard() {
+        return board;
+    }
+
+    public final JComponent getGui() {
+        return gui;
+    }
 
 }

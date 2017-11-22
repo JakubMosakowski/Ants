@@ -1,11 +1,17 @@
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-	class Ant{
-		int x=0;
-		int y=0;
-		int move=0;
-		int id=0;
+class Ant{
+		protected int x;
+		protected int y;
+		protected int move;
+		protected static final AtomicInteger count = new AtomicInteger(0);
+		private final int id;
+		protected boolean holdsLeaf;
+		 static final   char TYPE='A';
+		int health;
+		int attack;
 		String name="ImieMrówkiNr";
 
 		public int getMove(){
@@ -17,21 +23,29 @@ import java.util.*;
 		public int getY(){
 			return y;
 		}
-		Ant(int A,int B){
-			x=A;
-			y=B;
-			id++;
+		Ant(){
+			holdsLeaf=false;
+			randomLocation();
+			id=count.incrementAndGet();
 			name=name+String.valueOf(id);
+			//TODO remove line below, only checking
+			System.out.println(name);
+		}
+		protected void setStats(int hp,int dmg){
+			health=hp;
+			attack=dmg;
+		}
+		protected void setName(String n){
+			name=n;
 		}
 
-		Ant(){}
-		public void spawn(){
-			Random ranGen=new Random();
-			x=ranGen.nextInt(Max.MAX_X-2);
-			x++;
-			y=ranGen.nextInt(Max.MAX_Y-2);
-			y++;
+
+		protected void randomLocation() {
+			Random gen = new Random();
+			x=gen.nextInt(Max.SIZE);
+			y=gen.nextInt(Max.SIZE);
 		}
+
 
 		public boolean antDies(){
 			if(move>=Max.MOVES)
@@ -52,23 +66,23 @@ import java.util.*;
 				y=checkIfUnder(y);
 				break;
 			case 3:
-				x=checkIfAbove(x,Max.MAX_X);
+				x=checkIfAbove(x);
 				break;
 			case 4:
-				y=checkIfAbove(y,Max.MAX_Y);
+				y=checkIfAbove(y);
 				break;
 			}
 			move++;
 
 		}
 		public int checkIfUnder(int num){
-			if(num==1)
+			if(num==0)
 				return num;
 			else
 				return num-1;
 		}
-		public int checkIfAbove(int num,int max){
-			if(num==(max-2))
+		public int checkIfAbove(int num){
+			if(num==(Max.SIZE-1))
 				return num;
 			else
 				return num+1;

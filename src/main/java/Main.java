@@ -1,15 +1,13 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 
 
 class Main{
     static final String APP_NAME="Anthill";
 	public static void main(String arg[]){
-		String x,y;
         getScreenSize();
-        Board.showJFrame();
+        setJFrame();
 
 
 		/*
@@ -32,14 +30,24 @@ class Main{
 			}
 		}
 		System.out.println("Your ants died.");*/
-
-        System.out.println(Max.MAX_X+"|"+Max.MAX_Y);
-        try {
-            int z=System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 	}
+
+    private static void setJFrame() {
+        Runnable r = new Runnable() {
+            public void run() {
+                Board cb = new Board();
+                JFrame f = new JFrame(APP_NAME);
+                f.add(cb.getGui());
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                f.setLocationByPlatform(true);
+                f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                f.pack();
+                f.setMinimumSize(f.getSize());
+                f.setVisible(true);
+            }
+        };
+        SwingUtilities.invokeLater(r);
+    }
 
     private static void getScreenSize() {
         Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();

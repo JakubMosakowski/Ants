@@ -13,7 +13,7 @@ class MainFrame extends JFrame{
     static JFrame f;
     ActionListener refresh=new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
-            nextTurn();
+           nextTurn();
         }
     };
 	public static void main(String arg[]){
@@ -34,7 +34,8 @@ class MainFrame extends JFrame{
                 anthill.spawnLeaves();
                 anthill.spawnQueen();
         ActionListener taskPerformer = refresh;
-        new Timer(DELAY, taskPerformer).start();
+        Timer timer=new Timer(DELAY, taskPerformer);
+        timer.start();
 
 
     }
@@ -52,11 +53,11 @@ class MainFrame extends JFrame{
 
     private static void setJFrame() {
         f.add(b.getGui());
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLocationByPlatform(true);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.pack();
-        f.setMinimumSize(f.getSize());
+        f.setSize(Max.MAX_X,Max.MAX_Y);
         f.setVisible(true);
 
     }

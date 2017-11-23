@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,10 +8,11 @@ class Ant{
 		protected static final AtomicInteger count = new AtomicInteger(0);
 		private final int id;
 		protected boolean holdsLeaf;
-		 static final   char TYPE='A';
+	    static final   char TYPE='A';
 		int health;
 		int attack;
 		String name;
+		double degreesFacing;//TODO przerób to!
 
 		public int getMove(){
 			return move;

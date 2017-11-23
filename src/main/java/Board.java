@@ -1,12 +1,18 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 class Board {
 
+    public static final String ICONS_ANT_PNG = "icons/Ant.png";
+    public static final String ICONS_ANT_QUEEN_PNG = "icons/AntQueen.png";
+    public static final String ICONS_LEAF_PNG = "icons/Leaf.png";
+    public static final String ICONS_ANTHILL_PNG = "icons/Anthill.png";
     private final JPanel gui = new JPanel(new BorderLayout(3, 3));
 
     private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
@@ -15,6 +21,18 @@ class Board {
     public static char TYPE_EMPTY='E';
     JToolBar tools;
     JButton button;
+    static Queen queen;
+    static public void setQueen(Queen q) {
+        queen = q;
+    }
+
+
+
+    static public void setAnts(Ant[] a) {
+        ants = a;
+    }
+
+    static Ant ants[];
     Board() {
         initializeGui();
     }
@@ -47,25 +65,32 @@ class Board {
         b.setIcon(icon);
     }
 
-    private void squareWithAnt(JLabel square) {
-        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Ant.png"));
+    private void squareWithImage(JLabel square,String imagePath,double degrees){
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(ClassLoader.getSystemResourceAsStream(imagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        image = rotateImage(image, degrees);
+
+        ImageIcon icon = new ImageIcon(image);
         square.setIcon(icon);
     }
 
-    private void squareWithAntQueen(JLabel square) {
-        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/AntQueen.png"));
-        square.setIcon(icon);
+
+
+
+    private BufferedImage rotateImage(BufferedImage image, double degrees) {
+        double radians=Math.toRadians(degrees);
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(radians, image.getWidth()/2, image.getHeight()/2);
+        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+        image = op.filter(image, null);
+        return image;
     }
 
-    private void squareWithLeaf(JLabel square) {
-        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Leaf.png"));
-        square.setIcon(icon);
-    }
-
-    private void squareWithAnthill(JLabel square) {
-        ImageIcon icon = new ImageIcon(ClassLoader.getSystemResource("icons/Anthill.png"));
-        square.setIcon(icon);
-    }
 
     private void fillBoard() {
         gui.remove(board);
@@ -98,21 +123,38 @@ class Board {
     }
 
      void showNewTurn() {
+
+
         for (int i = 0; i < boardSquares.length; i++) {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
 
                 if (boardSquaresTags[i][j] == Queen.TYPE) {
-                    squareWithAntQueen(b);
-                } else if (boardSquaresTags[i][j] == Ant.TYPE)
-                    squareWithAnt(b);
-                else if (boardSquaresTags[i][j] == Anthill.TYPE)
-                    squareWithAnthill(b);
-                else if (boardSquaresTags[i][j] == Leaf.TYPE)
-                    squareWithLeaf(b);
-                else
+                    squareWithImage(b,ICONS_ANT_QUEEN_PNG,queen.degreesFacing);
+                } else if (boardSquaresTags[i][j] == Ant.TYPE){
+
+                    for(Ant ant : ants){
+                        if(ant.x==i && ant.y==j){
+                            double dgr=ant.degreesFacing;
+                            squareWithImage(b,ICONS_ANT_PNG,dgr);
+                            break;
+                        }
+
+
+                    }
+                }
+                else if (boardSquaresTags[i][j] == Anthill.TYPE){
+                    squareWithImage(b,ICONS_ANTHILL_PNG,0);
+
+                }
+                else if (boardSquaresTags[i][j] == Leaf.TYPE){
+                    squareWithImage(b,ICONS_LEAF_PNG,0);
+
+                }
+                else{
                     squareEmpty(b);
+                }
 
                 boardSquares[j][i] = b;
 

@@ -39,6 +39,8 @@ class Anthill {
         for(int i=0;i<Max.MAX_ANTS;i++){
             Board.boardSquaresTags[ants[i].x][ants[i].y]=Board.TYPE_EMPTY;
             ants[i].move();
+            Board.setAnts(ants);
+            Board.setQueen(queen);
 
             Board.boardSquaresTags[ants[i].x][ants[i].y]=Ant.TYPE;
         }

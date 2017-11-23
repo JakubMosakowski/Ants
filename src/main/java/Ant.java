@@ -12,7 +12,7 @@ class Ant{
 		 static final   char TYPE='A';
 		int health;
 		int attack;
-		String name="ImieMrówkiNr";
+		String name;
 
 		public int getMove(){
 			return move;
@@ -27,9 +27,6 @@ class Ant{
 			holdsLeaf=false;
 			randomLocation();
 			id=count.incrementAndGet();
-			name=name+String.valueOf(id);
-			//TODO remove line below, only checking
-			System.out.println(name);
 		}
 		protected void setStats(int hp,int dmg){
 			health=hp;
@@ -54,38 +51,55 @@ class Ant{
 				return false;
 		}
 		public void move(){
+			int movX=x;
+			int movY=y;
 			Random ranGen=new Random();
-			int number =ranGen.nextInt(5);
+			int number =ranGen.nextInt(4);
 			switch (number){
-			case 0:
-				break;
-			case 1:
-				x=checkIfUnder(x);
-				break;
-			case 2:
-				y=checkIfUnder(y);
-				break;
-			case 3:
-				x=checkIfAbove(x);
-				break;
-			case 4:
-				y=checkIfAbove(y);
-				break;
+				case 0:
+					movX=checkIfUnder(movX);
+					break;
+				case 1:
+					movY=checkIfUnder(movY);
+					break;
+				case 2:
+					movX=checkIfAbove(movX);
+					break;
+				case 3:
+					movY=checkIfAbove(movY);
+					break;
 			}
+			if(checkIfCanGoThere(movX,movY))
+			{
+				x=movX;
+				y=movY;
+			}
+
 			move++;
 
 		}
-		public int checkIfUnder(int num){
+	private int checkIfUnder(int num){
 			if(num==0)
 				return num;
 			else
 				return num-1;
 		}
-		public int checkIfAbove(int num){
+		private int checkIfAbove(int num){
 			if(num==(Max.SIZE-1))
 				return num;
 			else
 				return num+1;
 		}
+		private boolean checkIfCanGoThere(int x,int y){
+
+			if(Board.boardSquaresTags[x][y]!=Ant.TYPE
+					&& Board.boardSquaresTags[x][y]!=Queen.TYPE
+					&& Board.boardSquaresTags[x][y]!=Anthill.TYPE){
+				return true;
+			}else
+				return false;
+
+		}
+
 
 	}

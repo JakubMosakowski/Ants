@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 class Board {
@@ -10,7 +12,9 @@ class Board {
     private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
     static char[][] boardSquaresTags = new char[Max.SIZE][Max.SIZE];
     private JPanel board;
-
+    public static char TYPE_EMPTY='E';
+    JToolBar tools;
+    JButton button;
     Board() {
         initializeGui();
     }
@@ -34,13 +38,6 @@ class Board {
 
                 boardSquares[j][i] = b;
                 boardSquaresTags[j][i] = 'E';
-                //TODO remove that,just for checking
-                if ((i + j) % 10 == 0)
-                    squareWithAnt(b);
-                else if ((i + j) % 10 == 8)
-                    squareWithAntQueen(b);
-                else if ((i + j) % 10 == 5)
-                    squareWithLeaf(b);
             }
         }
     }
@@ -83,13 +80,16 @@ class Board {
     }
 
     private void setToolbar() {
-        JToolBar tools = new JToolBar();
+        tools = new JToolBar();
         tools.setFloatable(false);
         gui.add(tools, BorderLayout.PAGE_START);
         //TODO pozmieniaj te przyciski
         tools.add(new JButton("New")); // TODO - add functionality!
         tools.addSeparator();
-        tools.add(new JButton("Save")); // TODO - add functionality!
+
+        button =new JButton("Save");
+
+        tools.add(button); // TODO - add functionality!
         tools.addSeparator();
         tools.add(new JButton("Restore")); // TODO - add functionality!
         tools.addSeparator();
@@ -103,22 +103,19 @@ class Board {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
 
-                if (boardSquaresTags[i][j] == 'E') {
-                    squareEmpty(b);//TODO ma pokazywac puste, tylko test
-                    //squareWithAnt(b);
-                    //System.out.println(i+"|"+j);
-                } else if (boardSquaresTags[i][j] == 'A')
+                if (boardSquaresTags[i][j] == Queen.TYPE) {
+                    squareWithAntQueen(b);
+                } else if (boardSquaresTags[i][j] == Ant.TYPE)
                     squareWithAnt(b);
-                else if (boardSquaresTags[i][j] == 'H')
+                else if (boardSquaresTags[i][j] == Anthill.TYPE)
                     squareWithAnthill(b);
-                else if (boardSquaresTags[i][j] == 'L')
+                else if (boardSquaresTags[i][j] == Leaf.TYPE)
                     squareWithLeaf(b);
                 else
-                    squareWithAntQueen(b);
+                    squareEmpty(b);
 
                 boardSquares[j][i] = b;
 
-                //TODO remove that,just for checking
 
             }
 
@@ -136,6 +133,12 @@ class Board {
 
     public final JComponent getGui() {
         return gui;
+    }
+    public final JComponent getTools() {
+        return tools;
+    }
+    public final JComponent getButton() {
+        return button;
     }
 
 }

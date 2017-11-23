@@ -526,7 +526,7 @@ ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsysca
 
 VM Arguments:
 jvm_args: -javaagent:/usr/share/intellijidea-ce/lib/idea_rt.jar=42247:/usr/share/intellijidea-ce/bin -Dfile.encoding=UTF-8 
-java_command: Main
+java_command: MainFrame
 java_class_path (initial): /usr/lib/jvm/default-runtime/jre/lib/charsets.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/cldrdata.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/dnsns.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/jaccess.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/localedata.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/nashorn.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/sunec.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/sunjce_provider.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/sunpkcs11.jar:/usr/lib/jvm/default-runtime/jre/lib/ext/zipfs.jar:/usr/lib/jvm/default-runtime/jre/lib/jce.jar:/usr/lib/jvm/default-runtime/jre/lib/jsse.jar:/usr/lib/jvm/default-runtime/jre/lib/management-agent.jar:/usr/lib/jvm/default-runtime/jre/lib/resources.jar:/usr/lib/jvm/default-runtime/jre/lib/rt.jar:/home/kuba/IdeaProjects/Ants/target/classes:/home/kuba/.m2/repository/org/jline/jline/3.5.1/jline-3.5.1.jar:/usr/share/intellijidea-ce/lib/idea_rt.jar
 Launcher Type: SUN_STANDARD
 

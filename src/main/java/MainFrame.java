@@ -33,6 +33,7 @@ class MainFrame extends JFrame{
                 setJFrame();
                 anthill.spawnLeaves();
                 anthill.spawnQueen();
+        Board.setQueen(anthill.queen);
         ActionListener taskPerformer = refresh;
         Timer timer=new Timer(DELAY, taskPerformer);
         timer.start();
@@ -43,7 +44,6 @@ class MainFrame extends JFrame{
 
 
     private static void nextTurn() {
-        //TODO jakis system tur niech sie rusza, podadzą do board nową tablice tagów
         f.remove(b.getGui());
         anthill.moveAnts();
         b.showNewTurn();
@@ -55,9 +55,9 @@ class MainFrame extends JFrame{
         f.add(b.getGui());
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLocationByPlatform(true);
+        f.setMinimumSize(b.getGui().getMinimumSize());
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.pack();
-        f.setSize(Max.MAX_X,Max.MAX_Y);
         f.setVisible(true);
 
     }
@@ -67,7 +67,7 @@ class MainFrame extends JFrame{
         Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
         double panelHeight=screenSize.getHeight();
         double panelWidth=screenSize.getWidth();
-        Max.setMax((int)Math.round(panelWidth),(int)Math.round(panelHeight),10,300,30,5);
+        Max.setMax((int)Math.round(panelWidth),(int)Math.round(panelHeight),20,300,30,15);
     }
 
 

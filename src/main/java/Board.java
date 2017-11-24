@@ -10,6 +10,7 @@ import java.io.IOException;
 class Board {
 
     public static final String ICONS_ANT_PNG = "icons/Ant.png";
+    public static final String ICONS_ANT_WITH_LEAF_PNG = "icons/AntWithLeaf.png";
     public static final String ICONS_ANT_QUEEN_PNG = "icons/AntQueen.png";
     public static final String ICONS_LEAF_PNG = "icons/Leaf.png";
     public static final String ICONS_ANTHILL_PNG = "icons/Anthill.png";
@@ -22,6 +23,12 @@ class Board {
     JToolBar tools;
     JButton button;
     static Queen queen;
+
+    public static void setLeaves(Leaf[] leaves) {
+        Board.leaves = leaves;
+    }
+
+    static Leaf[] leaves;
     static public void setQueen(Queen q) {
         queen = q;
     }
@@ -137,7 +144,10 @@ class Board {
                     for(Ant ant : ants){
                         if(ant.x==i && ant.y==j){
                             double dgr=ant.degreesFacing;
-                            squareWithImage(b,ICONS_ANT_PNG,dgr);
+                            if(ant.holdsLeaf)
+                                squareWithImage(b,ICONS_ANT_WITH_LEAF_PNG,dgr);
+                            else
+                                squareWithImage(b,ICONS_ANT_PNG,dgr);
                             break;
                         }
 

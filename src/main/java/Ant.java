@@ -1,22 +1,12 @@
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class Ant {
-    protected int x;
-    protected int y;
+class Ant extends ObjectSquare{
     protected int move;
-    protected static final AtomicInteger count = new AtomicInteger(0);
-    private final int id;
+    public final String ICON_WITHOUT_LEAF="icons/Ant.png";
+    public final String ICON_WITH_LEAF ="icons/AntWithLeaf.png";
     protected boolean holdsLeaf;
-    static final char TYPE = 'A';
-    int health;
-    int attack;
-    String name;
-    double degreesFacing;
-    static final double UP_DEGREE = 0;
-    static final double DOWN_DEGREE = 180;
-    static final double LEFT_DEGREE = 270;
-    static final double RIGHT_DEGREE = 90;
+
 
 
     public void changeHoldingLeaf() {
@@ -27,38 +17,21 @@ class Ant {
         return move;
     }
 
-    public int getX() {
-        return x;
-    }
 
-    public int getY() {
-        return y;
-    }
 
     Ant() {
+        name="ant";
         holdsLeaf = false;
-        randomLocation();
-        id = count.incrementAndGet();
-    }
-
-    protected void setStats(int hp, int dmg) {
-        health = hp;
-        attack = dmg;
-    }
-
-    protected void setName(String n) {
-        name = n;
+        ICON=ICON_WITHOUT_LEAF;
+        x=Max.SIZE/2;
+        y=Max.SIZE/2;
     }
 
 
-    private void randomLocation() {
-        Random gen = new Random();
-        x = gen.nextInt(Max.SIZE);
-        y = gen.nextInt(Max.SIZE);
-    }
 
 
-    public void move() {
+
+    public void move(ObjectSquare[][] objects) {
         int movX = x;
         int movY = y;
         Random ranGen = new Random();
@@ -134,10 +107,10 @@ class Ant {
     }
 
     private boolean checkHereIsLeaf(int movX, int movY) {
-        if (Board.boardSquaresTags[movX][movY] == Leaf.TYPE)
+    //    if (Board.boardSquaresTags[movX][movY] == Leaf.TYPE)
             return true;
-        else
-            return false;
+        //else
+        //    return false;
     }
 
     private boolean checkIfTurnsBack(double direction) {
@@ -170,12 +143,11 @@ class Ant {
 
     private boolean checkIfCanGoThere(int x, int y) {
 
-        if (Board.boardSquaresTags[x][y] != Ant.TYPE
-                && Board.boardSquaresTags[x][y] != Queen.TYPE
-                && Board.boardSquaresTags[x][y] != Anthill.TYPE) {
+        //if (Board.boardSquaresTags[x][y] != Ant.TYPE
+         //       && Board.boardSquaresTags[x][y] != Queen.TYPE) {
             return true;
-        } else
-            return false;
+        //} else
+        //    return false;
 
     }
 

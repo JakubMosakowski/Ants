@@ -1,25 +1,17 @@
 import java.util.Random;
 
-class Leaf {
-    public int getX() {
-        return x;
-    }
+class Leaf extends ObjectSquare{
 
-    public int getY() {
-        return y;
-    }
 
-    private int x;
-    private int y;
-    public static char TYPE = 'L';
-
-    public void setRaised(boolean raised) {
-        this.raised = raised;
+    public void setRaised(boolean Raised) {
+        this.raised = Raised;
     }
 
     private boolean raised;
 
     public Leaf() {
+        name="leaf";
+        ICON = "icons/Leaf.png";
         Random rand = new Random();
         raised=false;
         for (int i = 0; i < Max.LEAVES; i++) {

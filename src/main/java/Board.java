@@ -8,69 +8,40 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 class Board {
-
-    public static final String ICONS_ANT_PNG = "icons/Ant.png";
-    public static final String ICONS_ANT_WITH_LEAF_PNG = "icons/AntWithLeaf.png";
-    public static final String ICONS_ANT_QUEEN_PNG = "icons/AntQueen.png";
-    public static final String ICONS_LEAF_PNG = "icons/Leaf.png";
-    public static final String ICONS_ANTHILL_PNG = "icons/Anthill.png";
     private final JPanel gui = new JPanel(new BorderLayout(3, 3));
-
     private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
-    static char[][] boardSquaresTags = new char[Max.SIZE][Max.SIZE];
     private JPanel board;
-    public static char TYPE_EMPTY='E';
-    JToolBar tools;
-    JButton button;
-    static Queen queen;
+    public  ObjectSquare[][] objects = new ObjectSquare[Max.SIZE][Max.SIZE];
+    private JToolBar tools;
+    private JButton buttonAddAnt;
 
-    public static void setLeaves(Leaf[] leaves) {
-        Board.leaves = leaves;
-    }
-
-    static Leaf[] leaves;
-    static public void setQueen(Queen q) {
-        queen = q;
-    }
-
-
-
-    static public void setAnts(Ant[] a) {
-        ants = a;
-    }
-
-    static Ant ants[];
     Board() {
+        for (int i = 0; i < boardSquares.length; i++)
+            for (int j = 0; j < boardSquares[i].length; j++)
+                objects[i][j]=new ObjectSquare();
         initializeGui();
     }
-
 
     private final void initializeGui() {
         board = new JPanel(new GridLayout(0, Max.SIZE));
         setToolbar();
-        createEmptySquares();
+        createSquares();
         fillBoard();
         gui.setBorder(new EmptyBorder(5, 5, 5, 5));
 
     }
 
-    private void createEmptySquares() {
+    private void createSquares() {
         for (int i = 0; i < boardSquares.length; i++) {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                squareEmpty(b);
-
+                squareWithImage(b,objects[i][j].ICON,objects[i][j].degreesFacing);
                 boardSquares[j][i] = b;
-                boardSquaresTags[j][i] = 'E';
             }
         }
     }
-    private void squareEmpty(JLabel b) {
-        ImageIcon icon = new ImageIcon(
-                new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB));
-        b.setIcon(icon);
-    }
+
 
     private void squareWithImage(JLabel square,String imagePath,double degrees){
         BufferedImage image = null;
@@ -81,13 +52,9 @@ class Board {
         }
 
         image = rotateImage(image, degrees);
-
         ImageIcon icon = new ImageIcon(image);
         square.setIcon(icon);
     }
-
-
-
 
     private BufferedImage rotateImage(BufferedImage image, double degrees) {
         double radians=Math.toRadians(degrees);
@@ -97,7 +64,6 @@ class Board {
         image = op.filter(image, null);
         return image;
     }
-
 
     private void fillBoard() {
         gui.remove(board);
@@ -115,73 +81,26 @@ class Board {
         tools = new JToolBar();
         tools.setFloatable(false);
         gui.add(tools, BorderLayout.PAGE_START);
-        //TODO pozmieniaj te przyciski
-        tools.add(new JButton("New")); // TODO - add functionality!
-        tools.addSeparator();
+        buttonAddAnt =new JButton("Spawn Ant");
+        tools.add(buttonAddAnt);
 
-        button =new JButton("Save");
-
-        tools.add(button); // TODO - add functionality!
-        tools.addSeparator();
-        tools.add(new JButton("Restore")); // TODO - add functionality!
-        tools.addSeparator();
-        tools.add(new JButton("Resign")); // TODO - add functionality!
-        tools.addSeparator();
     }
 
      void showNewTurn() {
-
-
         for (int i = 0; i < boardSquares.length; i++) {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-
-                if (boardSquaresTags[i][j] == Queen.TYPE) {
-                    squareWithImage(b,ICONS_ANT_QUEEN_PNG,queen.degreesFacing);
-                } else if (boardSquaresTags[i][j] == Ant.TYPE){
-
-                    for(Ant ant : ants){
-                        if(ant.x==i && ant.y==j){
-                            double dgr=ant.degreesFacing;
-                            if(ant.holdsLeaf)
-                                squareWithImage(b,ICONS_ANT_WITH_LEAF_PNG,dgr);
-                            else
-                                squareWithImage(b,ICONS_ANT_PNG,dgr);
-                            break;
-                        }
-
-
-                    }
-                }
-                else if (boardSquaresTags[i][j] == Anthill.TYPE){
-                    squareWithImage(b,ICONS_ANTHILL_PNG,0);
-
-                }
-                else if (boardSquaresTags[i][j] == Leaf.TYPE){
-                    squareWithImage(b,ICONS_LEAF_PNG,0);
-
-                }
-                else{
-                    squareEmpty(b);
-                }
-
+                squareWithImage(b,objects[i][j].ICON,objects[i][j].degreesFacing);
                 boardSquares[j][i] = b;
-
-
             }
-
         }
         fillBoard();
-
     }
 
 
 
 
-    public final JComponent getBoard() {
-        return board;
-    }
 
     public final JComponent getGui() {
         return gui;
@@ -189,8 +108,12 @@ class Board {
     public final JComponent getTools() {
         return tools;
     }
-    public final JComponent getButton() {
-        return button;
+    public final JButton getButtonAddAnt() {
+        return buttonAddAnt;
     }
 
+    public  void passObjects(ObjectSquare[][] Objects) {
+        objects=Objects;
+        showNewTurn();
+    }
 }

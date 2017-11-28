@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 class MainFrame extends JFrame {
     static final String APP_NAME = "Anthill";
-    static final int DELAY = 1000;
+    static final int DELAY = 2000;
     static Anthill anthill;
     static Board b;
     static JFrame f;
@@ -57,7 +57,7 @@ class MainFrame extends JFrame {
     private static void nextTurn() {
         f.remove(b.getGui());
         anthill.moveAnts();
-        b.passObjects(anthill.getObjects());
+        b.passObjects(anthill.getCurrentObj());
         f.add(b.getGui());
         f.revalidate();
     }

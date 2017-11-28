@@ -14,6 +14,7 @@ class Board {
     public  ObjectSquare[][] objects = new ObjectSquare[Max.SIZE][Max.SIZE];
     private JToolBar tools;
     private JButton buttonAddAnt;
+    private ObjectSquare emptyObject=new ObjectSquare();
 
     Board() {
         for (int i = 0; i < boardSquares.length; i++)
@@ -36,34 +37,45 @@ class Board {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                squareWithImage(b,objects[i][j].ICON,objects[i][j].degreesFacing);
+                squareWithImage(b,objects[i][j]);
                 boardSquares[j][i] = b;
             }
         }
     }
+    private void squareEmpty(JLabel b) {
+        ImageIcon icon = new ImageIcon(
+                new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB));
+        b.setIcon(icon);
+    }
 
-
-    private void squareWithImage(JLabel square,String imagePath,double degrees){
+    private void squareWithImage(JLabel square,ObjectSquare object){
         BufferedImage image = null;
+        if(!object.getICON().equals(emptyObject.getICON())) {
+            try {
+                image = ImageIO.read(ClassLoader.getSystemResourceAsStream(object.getICON()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            image = ImageIO.read(ClassLoader.getSystemResourceAsStream(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+            image = rotateImage(image, object.getDegreesFacing());
+            ImageIcon icon = new ImageIcon(image);
+            image.flush();
+            square.setIcon(icon);
+        }else{
+
+            squareEmpty(square);
         }
 
-        image = rotateImage(image, degrees);
-        ImageIcon icon = new ImageIcon(image);
-        image.flush();
-        square.setIcon(icon);
     }
 
     private BufferedImage rotateImage(BufferedImage image, double degrees) {
-        double radians=Math.toRadians(degrees);
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(radians, image.getWidth()/2, image.getHeight()/2);
-        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
-        image = op.filter(image, null);
+        if(degrees!=0){
+            double radians=Math.toRadians(degrees);
+            AffineTransform transform = new AffineTransform();
+            transform.rotate(radians, image.getWidth()/2, image.getHeight()/2);
+            AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+            image = op.filter(image, null);
+        }
         return image;
     }
 
@@ -93,7 +105,7 @@ class Board {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                squareWithImage(b,objects[i][j].ICON,objects[i][j].degreesFacing);
+                squareWithImage(b,objects[i][j]);
                 boardSquares[j][i] = b;
             }
         }
@@ -114,8 +126,13 @@ class Board {
         return buttonAddAnt;
     }
 
-    public  void passObjects(ObjectSquare[][] Objects) {
-        objects=Objects;
+    public  void passObjects(ObjectSquare[] Objects) {
+        for(ObjectSquare obj:Objects) {
+            if (obj != null)
+                objects[obj.getX()][obj.getY()] = obj;
+            else
+                break;
+        }
         showNewTurn();
     }
 }

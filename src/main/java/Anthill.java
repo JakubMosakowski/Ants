@@ -3,6 +3,18 @@ import java.util.*;
 
 class Anthill {
 
+    public Ant[] getAnts() {
+        return ants;
+    }
+
+    public Leaf[] getLeaves() {
+        return leaves;
+    }
+
+    public Queen getQueen() {
+        return queen;
+    }
+
     protected Ant ants[] = new Ant[Max.MAX_ANTS];
     protected Leaf leaves[] = new Leaf[Max.LEAVES];
     protected Queen queen;
@@ -12,19 +24,32 @@ class Anthill {
     }
 
     private int id = 0;
-    private ObjectSquare[][] objects = new ObjectSquare[Max.SIZE][Max.SIZE];
-    private ObjectSquare objectEmpty= new ObjectSquare();
+    private ObjectSquare[] objects = new ObjectSquare[Max.FIELDS];
+
+    public ObjectSquare[] getCurrentObj() {
+        return currentObj;
+    }
+
+    private ObjectSquare[] currentObj;
+
 
     Anthill() {
-        fillObjects();
         spawnQueen();
     }
 
-    private void fillObjects() {
-        for (int i = 0; i < Max.SIZE; i++)
-            for (int j = 0; j < Max.SIZE; j++)
-                objects[i][j] = new ObjectSquare();
+    public void trimObjects(){
+        int i=0;
+        for(ObjectSquare ob:objects){
+            if(ob!=null)
+                i++;
+            else
+                break;
+        }
+        currentObj=new ObjectSquare[i];
+        for(int j=0;j<i;j++)
+            currentObj[j]=objects[j];
     }
+
 
     public void spawnAnt() {
         ants[id] = new Ant(queen.getX(),queen.getY()+1);
@@ -33,12 +58,13 @@ class Anthill {
     }
 
     public void passToObjects(ObjectSquare object) {
-        objects[object.getX()][object.getY()] = object;
+        for(int i=0;i<Max.FIELDS;i++)
+            if(objects[i]==null){
+                objects[i]=object;
+                break;
+            }
     }
 
-    public ObjectSquare[][] getObjects() {
-        return objects;
-    }
 
     public void spawnLeaves() {
         for (int i = 0; i < Max.LEAVES; i++) {
@@ -55,20 +81,22 @@ class Anthill {
 
 
     public void moveAnts() {
+        trimObjects();
 
-        for (int i = 0; i < Max.MAX_ANTS; i++) {
-            if(ants[i]!=null){
-                ants[i].move(objects);
-                passToObjects(ants[i]);
-                passToObjects(new ObjectSquare(ants[i].getPreX(),ants[i].getPreY()));
-
+        for (int i = 0; i < currentObj.length; i++) {
+           if(currentObj[i].getName().equals(Ant.staticName)){
+               System.out.println("TEST");
+               ((Ant)currentObj[i]).move(currentObj);
             }
+            else
+               System.out.println("Else"+currentObj[i].getName());
 
 
-
-
+//TODO queen sie przekręca
+            //TODO jedna mrówka nie zabiera swojego śladu
 
         }
+        trimObjects();
 
 
     }

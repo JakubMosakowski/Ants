@@ -18,6 +18,7 @@ class Ant extends ObjectSquare {
 
     Ant() {
         staticName = "ant";
+        name=staticName;
         holdsLeaf = false;
         ICON = ICON_WITHOUT_LEAF;
         x = Max.SIZE / 2;
@@ -28,6 +29,7 @@ class Ant extends ObjectSquare {
 
     Ant(int X, int Y) {
         staticName = "ant";
+        name=staticName;
         holdsLeaf = false;
         ICON = ICON_WITHOUT_LEAF;
         x = X;
@@ -37,7 +39,7 @@ class Ant extends ObjectSquare {
     }
 
 
-    public void move(ObjectSquare[][] objects) {
+    public void move(ObjectSquare[] objects) {
         preX=x;
         preY=y;
         int movX = x;
@@ -153,14 +155,22 @@ class Ant extends ObjectSquare {
             return num + 1;
     }
 
-    private boolean checkIfCanGoThere(int x, int y, ObjectSquare[][] objects) {
-        if (objects[x][y].getName().equals(Ant.staticName)
-                || objects[x][y].getName().equals(Queen.staticName)) {
-            System.out.println("false"+objects[x][y].getName() + "VS "+ Ant.staticName);
-            return false;
-        } else
-            System.out.println("true"+objects[x][y].getName() + "VS "+ Ant.staticName);
-            return true;
+    private boolean checkIfCanGoThere(int x, int y, ObjectSquare[] objects) {
+        for(ObjectSquare object :objects){
+            if(object.getX()==x
+                    &&object.getY()==y) {
+                if (object.getName().equals(Ant.staticName)
+                        || object.getName().equals(Queen.staticName)) {
+                    System.out.println("Return false"+object.getName());
+                    return false;
+                }
+                else
+                    break;
+            }
+        }
+        System.out.println("Return true");
+
+        return true;
     }
 
 

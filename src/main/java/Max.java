@@ -7,6 +7,7 @@ import java.util.*;
 		public static  int MAX_ANTS;
 		public static  int MOVES;
 		public static int LEAVES;
+		public static int FIELDS;
 		static void setMax(int X,int Y,int ants,int moves,int size,int leaves){
 			MAX_X=X;
 			MAX_Y=Y;
@@ -14,6 +15,7 @@ import java.util.*;
 			MOVES=moves;
 			SIZE=size;
 			LEAVES=leaves;
+			FIELDS=SIZE*SIZE;
 		}
 
 	}

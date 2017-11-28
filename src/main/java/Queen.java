@@ -4,6 +4,7 @@ public class Queen extends Ant {
         super();
         ICON= "icons/AntQueen.png";
         staticName =queenName;
+        name=staticName;
     }
 
 }

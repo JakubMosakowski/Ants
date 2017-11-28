@@ -11,6 +11,7 @@ class Leaf extends ObjectSquare{
 
     public Leaf() {
         staticName ="leaf";
+        name=staticName;
         ICON = "icons/Leaf.png";
         Random rand = new Random();
         raised=false;

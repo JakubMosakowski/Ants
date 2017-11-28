@@ -26,11 +26,21 @@ public class ObjectSquare {
     ObjectSquare(){}
 
     protected  String ICON= "icons/Empty.png";
+
+    public String getICON() {
+        return ICON;
+    }
+
     static final double UP_DEGREE = 0;
     static final double DOWN_DEGREE = 180;
     static final double LEFT_DEGREE = 270;
     static final double RIGHT_DEGREE = 90;
-    double degreesFacing;
+
+    public double getDegreesFacing() {
+        return degreesFacing;
+    }
+
+    protected double degreesFacing;
 
     public int getX() {
         return x;

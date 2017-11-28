@@ -1,12 +1,10 @@
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
-class Ant extends ObjectSquare{
+class Ant extends ObjectSquare {
     protected int move;
-    public final String ICON_WITHOUT_LEAF="icons/Ant.png";
-    public final String ICON_WITH_LEAF ="icons/AntWithLeaf.png";
+    public final String ICON_WITHOUT_LEAF = "icons/Ant.png";
+    public final String ICON_WITH_LEAF = "icons/AntWithLeaf.png";
     protected boolean holdsLeaf;
-
 
 
     public void changeHoldingLeaf() {
@@ -18,22 +16,33 @@ class Ant extends ObjectSquare{
     }
 
 
-
     Ant() {
-        name="ant";
+        staticName = "ant";
         holdsLeaf = false;
-        ICON=ICON_WITHOUT_LEAF;
-        x=Max.SIZE/2;
-        y=Max.SIZE/2;
+        ICON = ICON_WITHOUT_LEAF;
+        x = Max.SIZE / 2;
+        y = Max.SIZE / 2;
+        preX=x;
+        preY=y;
+    }
+
+    Ant(int X, int Y) {
+        staticName = "ant";
+        holdsLeaf = false;
+        ICON = ICON_WITHOUT_LEAF;
+        x = X;
+        y = Y;
+        preX=x;
+        preY=y;
     }
 
 
-
-
-
     public void move(ObjectSquare[][] objects) {
+        preX=x;
+        preY=y;
         int movX = x;
         int movY = y;
+        System.out.println("przed=x:"+movX+"y:"+movY);
         Random ranGen = new Random();
         boolean antMoved = false;
         while (!antMoved) {
@@ -91,24 +100,27 @@ class Ant extends ObjectSquare{
                 }
             }
         }
-        if (checkIfCanGoThere(movX, movY)) {
-            if (checkHereIsLeaf(movX, movY)) {
+        System.out.println("Po=x:"+movX+"y:"+movY);
+
+        if (checkIfCanGoThere(movX, movY,objects)) {
+           /* if (checkHereIsLeaf(movX, movY)) {
                 if (!this.holdsLeaf) {
                     this.changeHoldingLeaf();
                     x = movX;
                     y = movY;
                 }
             } else {
-                x = movX;
+             */   x = movX;
                 y = movY;
-            }
+            //}
         }
+
         move++;
     }
 
-    private boolean checkHereIsLeaf(int movX, int movY) {
-    //    if (Board.boardSquaresTags[movX][movY] == Leaf.TYPE)
-            return true;
+    private boolean checkHereIsLeaf(int movX, int movY, ObjectSquare[][] objects) {
+
+        return true;
         //else
         //    return false;
     }
@@ -141,14 +153,14 @@ class Ant extends ObjectSquare{
             return num + 1;
     }
 
-    private boolean checkIfCanGoThere(int x, int y) {
-
-        //if (Board.boardSquaresTags[x][y] != Ant.TYPE
-         //       && Board.boardSquaresTags[x][y] != Queen.TYPE) {
+    private boolean checkIfCanGoThere(int x, int y, ObjectSquare[][] objects) {
+        if (objects[x][y].getName().equals(Ant.staticName)
+                || objects[x][y].getName().equals(Queen.staticName)) {
+            System.out.println("false"+objects[x][y].getName() + "VS "+ Ant.staticName);
+            return false;
+        } else
+            System.out.println("true"+objects[x][y].getName() + "VS "+ Ant.staticName);
             return true;
-        //} else
-        //    return false;
-
     }
 
 

@@ -10,7 +10,7 @@ class Leaf extends ObjectSquare{
     private boolean raised;
 
     public Leaf() {
-        name="leaf";
+        staticName ="leaf";
         ICON = "icons/Leaf.png";
         Random rand = new Random();
         raised=false;

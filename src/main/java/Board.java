@@ -45,6 +45,7 @@ class Board {
 
     private void squareWithImage(JLabel square,String imagePath,double degrees){
         BufferedImage image = null;
+
         try {
             image = ImageIO.read(ClassLoader.getSystemResourceAsStream(imagePath));
         } catch (IOException e) {
@@ -53,6 +54,7 @@ class Board {
 
         image = rotateImage(image, degrees);
         ImageIcon icon = new ImageIcon(image);
+        image.flush();
         square.setIcon(icon);
     }
 

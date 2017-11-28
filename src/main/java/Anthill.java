@@ -11,31 +11,29 @@ class Anthill {
         return id;
     }
 
-    private  int id = 0;
+    private int id = 0;
     private ObjectSquare[][] objects = new ObjectSquare[Max.SIZE][Max.SIZE];
+    private ObjectSquare objectEmpty= new ObjectSquare();
 
     Anthill() {
         fillObjects();
         spawnQueen();
     }
 
-private void fillObjects(){
-        for(int i=0;i<Max.SIZE;i++)
-            for(int j=0;j<Max.SIZE;j++)
-                objects[i][j]=new ObjectSquare();
-}
+    private void fillObjects() {
+        for (int i = 0; i < Max.SIZE; i++)
+            for (int j = 0; j < Max.SIZE; j++)
+                objects[i][j] = new ObjectSquare();
+    }
+
     public void spawnAnt() {
-        ants[id] = new Ant();
-        System.out.println("Mrowka nr"+id);
+        ants[id] = new Ant(queen.getX(),queen.getY()+1);
         passToObjects(ants[id]);
         id++;
     }
 
-    public  void passToObjects(ObjectSquare   object) {
-        System.out.println("Przed nameW:"+(object).name);
+    public void passToObjects(ObjectSquare object) {
         objects[object.getX()][object.getY()] = object;
-        System.out.println("Po nameW:"+objects[object.getX()][object.getY()].name);
-
     }
 
     public ObjectSquare[][] getObjects() {
@@ -51,7 +49,6 @@ private void fillObjects(){
     public void spawnQueen() {
 
         queen = new Queen("Queen Elizabeth");
-        System.out.println("Przed name:"+queen.name);
         passToObjects(queen);
 
     }
@@ -60,19 +57,19 @@ private void fillObjects(){
     public void moveAnts() {
 
         for (int i = 0; i < Max.MAX_ANTS; i++) {
-            //Board.boardSquaresTags[ants[i].x][ants[i].y] = Board.TYPE_EMPTY;
-           /* if(ants[i]!=null){
+            if(ants[i]!=null){
                 ants[i].move(objects);
+                passToObjects(ants[i]);
+                passToObjects(new ObjectSquare(ants[i].getPreX(),ants[i].getPreY()));
+
             }
-*/
-            //Board.setAnts(ants);
-            //updateLeaves();
-            //Board.setLeaves(leaves);
 
 
-           // Board.boardSquaresTags[ants[i].x][ants[i].y] = Ant.TYPE;
+
+
+
         }
-        //Board.passObjects(objects);
+
 
     }
 

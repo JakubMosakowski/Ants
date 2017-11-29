@@ -6,9 +6,33 @@ class Ant extends ObjectSquare {
     public final String ICON_WITH_LEAF = "icons/AntWithLeaf.png";
     protected boolean holdsLeaf;
 
+    public int getQueenX() {
+        return queenX;
+    }
+
+    public void setQueenX(int queenX) {
+        this.queenX = queenX;
+    }
+
+    public int getQueenY() {
+        return queenY;
+    }
+
+    public void setQueenY(int queenY) {
+        this.queenY = queenY;
+    }
+
+    private int queenX;
+    private int queenY;
+
 
     public void changeHoldingLeaf() {
+
         holdsLeaf = !holdsLeaf;
+        if (holdsLeaf)
+            ICON = ICON_WITH_LEAF;
+        else
+            ICON = ICON_WITHOUT_LEAF;
     }
 
     public int getMove() {
@@ -17,114 +41,162 @@ class Ant extends ObjectSquare {
 
 
     Ant() {
-        staticName = "ant";
-        name=staticName;
+        className = "ant";
         holdsLeaf = false;
         ICON = ICON_WITHOUT_LEAF;
+        setXY();
+        setPreXY();
+    }
+
+    private void setPreXY() {
+        preX = x;
+        preY = y;
+    }
+
+    private void setXY() {
         x = Max.SIZE / 2;
         y = Max.SIZE / 2;
-        preX=x;
-        preY=y;
     }
 
     Ant(int X, int Y) {
-        staticName = "ant";
-        name=staticName;
+        className = "ant";
         holdsLeaf = false;
         ICON = ICON_WITHOUT_LEAF;
         x = X;
         y = Y;
-        preX=x;
-        preY=y;
+        setPreXY();
     }
 
 
+    public boolean isHoldingLeaf() {
+        return holdsLeaf;
+    }
+
     public void move(ObjectSquare[] objects) {
-        preX=x;
-        preY=y;
+        setPreXY();
         int movX = x;
         int movY = y;
-        System.out.println("przed=x:"+movX+"y:"+movY);
+
         Random ranGen = new Random();
-        boolean antMoved = false;
-        while (!antMoved) {
-            boolean goesStraight = ranGen.nextInt(2) == 0;
+        int number = ranGen.nextInt(4);
+        boolean goesStraight = ranGen.nextInt(2) == 0;
+        if (this.holdsLeaf) {
+            number = getDirection();
+            switch (number) {
+                case 0: {
+                    degreesFacing = UP_DEGREE;
+                    movX = moveIfNotUnder(movX);
+                }
+                break;
+                case 1: {
+                    degreesFacing = LEFT_DEGREE;
+                    movY = moveIfNotUnder(movY);
+                }
+                break;
+                case 2: {
+                    degreesFacing = DOWN_DEGREE;
+                    movX = checkIfNotAbove(movX);
+                }
+                break;
+                case 3: {
+                    degreesFacing = RIGHT_DEGREE;
+                    movY = checkIfNotAbove(movY);
+                }
+                break;
+            }
+        } else {
             if (goesStraight) {
                 switch ((int) (degreesFacing)) {
                     case (int) UP_DEGREE:
                         movX = moveIfNotUnder(movX);
-                        antMoved = true;
                         break;
                     case (int) LEFT_DEGREE:
                         movY = moveIfNotUnder(movY);
-                        antMoved = true;
                         break;
                     case (int) DOWN_DEGREE:
                         movX = checkIfNotAbove(movX);
-                        antMoved = true;
                         break;
                     case (int) RIGHT_DEGREE:
                         movY = checkIfNotAbove(movY);
-                        antMoved = true;
                         break;
                 }
             } else {
-                int number = ranGen.nextInt(4);
                 switch (number) {
                     case 0:
                         if (!checkIfTurnsBack(UP_DEGREE)) {
                             degreesFacing = UP_DEGREE;
                             movX = moveIfNotUnder(movX);
-                            antMoved = true;
                         }
                         break;
                     case 1:
                         if (!checkIfTurnsBack(LEFT_DEGREE)) {
                             degreesFacing = LEFT_DEGREE;
                             movY = moveIfNotUnder(movY);
-                            antMoved = true;
                         }
                         break;
                     case 2:
                         if (!checkIfTurnsBack(DOWN_DEGREE)) {
                             degreesFacing = DOWN_DEGREE;
                             movX = checkIfNotAbove(movX);
-                            antMoved = true;
                         }
                         break;
                     case 3:
                         if (!checkIfTurnsBack(RIGHT_DEGREE)) {
                             degreesFacing = RIGHT_DEGREE;
                             movY = checkIfNotAbove(movY);
-                            antMoved = true;
                         }
                         break;
                 }
             }
         }
-        System.out.println("Po=x:"+movX+"y:"+movY);
-
-        if (checkIfCanGoThere(movX, movY,objects)) {
-           /* if (checkHereIsLeaf(movX, movY)) {
-                if (!this.holdsLeaf) {
-                    this.changeHoldingLeaf();
-                    x = movX;
-                    y = movY;
-                }
-            } else {
-             */   x = movX;
-                y = movY;
-            //}
-        }
+        changeXY(objects, movX, movY);
 
         move++;
     }
 
-    private boolean checkHereIsLeaf(int movX, int movY, ObjectSquare[][] objects) {
+    private int getDirection() {
+        if (queenX > this.x)
+            return 2;
+        if (queenX < this.x)
+            return 0;
+        if (queenY > this.y)
+            return 3;
+        else
+            return 1;
+    }
 
-        return true;
-        //else
-        //    return false;
+    private void changeXY(ObjectSquare[] objects, int movX, int movY) {
+        if (checkIfCanGoThere(movX, movY, objects)) {
+            if (checkHereIsLeaf(movX, movY, objects)) {
+                if (!this.holdsLeaf) {
+                    this.changeHoldingLeaf();
+                    x = movX;
+                    y = movY;
+
+                } else {
+                    for (ObjectSquare ob : objects)
+                        if (ob.getX() == movX && ob.getY() == movY)
+                            if (ob.getClassName().equals(new Leaf().getClassName()))
+                                    x = movX;
+                                    y = movY;
+
+                }
+            } else {
+                x = movX;
+                y = movY;
+            }
+        }
+    }
+
+    private boolean checkHereIsLeaf(int movX, int movY, ObjectSquare[] objects) {
+        for (ObjectSquare ob : objects)
+            if (ob.getX() == movX && ob.getY() == movY)
+                if (ob.getClassName().equals(new Leaf().getClassName())&&
+                        ob.visible)
+                    return true;
+                else
+                    break;
+        return false;
     }
 
     private boolean checkIfTurnsBack(double direction) {
@@ -156,19 +228,16 @@ class Ant extends ObjectSquare {
     }
 
     private boolean checkIfCanGoThere(int x, int y, ObjectSquare[] objects) {
-        for(ObjectSquare object :objects){
-            if(object.getX()==x
-                    &&object.getY()==y) {
-                if (object.getName().equals(Ant.staticName)
-                        || object.getName().equals(Queen.staticName)) {
-                    System.out.println("Return false"+object.getName());
+        for (ObjectSquare object : objects) {
+            if (object.getX() == x
+                    && object.getY() == y) {
+                if (object.getClassName().equals(this.className)
+                        || object.getClassName().equals(new Queen().className)) {
                     return false;
-                }
-                else
+                } else
                     break;
             }
         }
-        System.out.println("Return true");
 
         return true;
     }

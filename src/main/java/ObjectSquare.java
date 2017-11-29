@@ -13,11 +13,21 @@ public class ObjectSquare {
 
     protected int preX=0;
     protected int preY=0;
-    static public String staticName ="Empty object";
-    protected String name=staticName;
+    protected String className;
+    protected String name;
+    protected boolean visible=true;
+    protected int id;
 
-    public String getName() {
-        return name;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getClassName() {
+        return className;
     }
     ObjectSquare(int X,int Y){
      x=X;

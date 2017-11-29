@@ -1,6 +1,3 @@
-import java.io.*;
-import java.util.*;
-
 class Anthill {
 
     public Ant[] getAnts() {
@@ -34,6 +31,7 @@ class Anthill {
 
 
     Anthill() {
+        spawnLeaves();
         spawnQueen();
     }
 
@@ -53,6 +51,9 @@ class Anthill {
 
     public void spawnAnt() {
         ants[id] = new Ant(queen.getX(),queen.getY()+1);
+        ants[id].setId(id);
+        ants[id].setQueenX(queen.getX());
+        ants[id].setQueenY(queen.getY());
         passToObjects(ants[id]);
         id++;
     }
@@ -69,11 +70,13 @@ class Anthill {
     public void spawnLeaves() {
         for (int i = 0; i < Max.LEAVES; i++) {
             leaves[i] = new Leaf();
+            passToObjects(leaves[i]);
         }
+
+
     }
 
     public void spawnQueen() {
-
         queen = new Queen("Queen Elizabeth");
         passToObjects(queen);
 
@@ -84,16 +87,9 @@ class Anthill {
         trimObjects();
 
         for (int i = 0; i < currentObj.length; i++) {
-           if(currentObj[i].getName().equals(Ant.staticName)){
-               System.out.println("TEST");
-               ((Ant)currentObj[i]).move(currentObj);
+           if(currentObj[i].getClassName().equals(new Ant().getClassName())){
+               checkIfTookLeaf(currentObj[i]);
             }
-            else
-               System.out.println("Else"+currentObj[i].getName());
-
-
-//TODO queen sie przekręca
-            //TODO jedna mrówka nie zabiera swojego śladu
 
         }
         trimObjects();
@@ -101,15 +97,30 @@ class Anthill {
 
     }
 
-    /*private void updateLeaves() {
-        //TODO leaves sprawdzają które znikneły, te co znikneły dostają boolean - enabled
-        for(int i=0;i<Max.SIZE;i++)
-            for(int j=0;j<Max.SIZE;j++)
-                for(Leaf leaf:leaves)
-                    if(Board.boardSquaresTags[i][j]==Leaf.TYPE){
-                        leaf.setRaised(true);
-                        //TODO liscie niech sie ruszają razem z mrówką która ją przejmie
-                        //TODO to jest zle bo sie pokazują te co są nie podniesione
-                    }
-    }*/
+    private void checkIfTookLeaf(ObjectSquare objectSquare) {
+        boolean holdLeaf=((Ant) objectSquare).isHoldingLeaf();
+        ((Ant) objectSquare).move(currentObj);
+        if(((Ant) objectSquare).isHoldingLeaf()!=holdLeaf)
+             for(ObjectSquare ob:currentObj)
+                 if(ob.getX()== objectSquare.getX()&&
+                         ob.getY()== objectSquare.getY()&&
+                         ob.getClassName().equals(new Leaf().getClassName())){
+                     changeLeafState(objectSquare, ob);
+                 }
+    }
+
+    private void changeLeafState(ObjectSquare objectSquare, ObjectSquare ob) {
+        ob.visible=false;
+        ((Leaf)ob).setRaised(true);
+        ob.setId(objectSquare.getId());
+    }
+
+    public int countLeaves() {
+        int counter=0;
+        for(int i=0;i<currentObj.length;i++)
+            if(currentObj[i].getClassName().equals(new Leaf().getClassName()) && !currentObj[i].visible)
+                counter++;
+        counter=(leaves.length)-counter;
+        return counter;
+    }
 }

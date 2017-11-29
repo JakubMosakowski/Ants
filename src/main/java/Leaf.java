@@ -10,8 +10,7 @@ class Leaf extends ObjectSquare{
     private boolean raised;
 
     public Leaf() {
-        staticName ="leaf";
-        name=staticName;
+        className ="leaf";
         ICON = "icons/Leaf.png";
         Random rand = new Random();
         raised=false;
@@ -19,7 +18,6 @@ class Leaf extends ObjectSquare{
             x = rand.nextInt(Max.SIZE );
             y = rand.nextInt(Max.SIZE);
         }
-
     }
 
 }

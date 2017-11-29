@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -11,15 +12,33 @@ class Board {
     private final JPanel gui = new JPanel(new BorderLayout(3, 3));
     private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
     private JPanel board;
-    public  ObjectSquare[][] objects = new ObjectSquare[Max.SIZE][Max.SIZE];
+    public  ObjectSquare[] objects = new ObjectSquare[Max.FIELDS];
     private JToolBar tools;
     private JButton buttonAddAnt;
+
+    public JButton getButtonStartAgain() {
+        return buttonStartAgain;
+    }
+
+    private JButton buttonStartAgain;
+
+    public JLabel getCommunicationLabel() {
+        return communicationLabel;
+    }
+
+    private JLabel antsCounter;
+
+    public JLabel getTimeCounter() {
+        return timeCounter;
+    }
+
+    private JLabel timeCounter;
+    private JLabel leavesCounter;
+    private JLabel communicationLabel;
+
     private ObjectSquare emptyObject=new ObjectSquare();
 
     Board() {
-        for (int i = 0; i < boardSquares.length; i++)
-            for (int j = 0; j < boardSquares[i].length; j++)
-                objects[i][j]=new ObjectSquare();
         initializeGui();
     }
 
@@ -37,7 +56,7 @@ class Board {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                squareWithImage(b,objects[i][j]);
+                squareEmpty(b);
                 boardSquares[j][i] = b;
             }
         }
@@ -50,7 +69,7 @@ class Board {
 
     private void squareWithImage(JLabel square,ObjectSquare object){
         BufferedImage image = null;
-        if(!object.getICON().equals(emptyObject.getICON())) {
+        if(!(object.getICON().equals(emptyObject.getICON()))&& object.visible) {
             try {
                 image = ImageIO.read(ClassLoader.getSystemResourceAsStream(object.getICON()));
             } catch (IOException e) {
@@ -91,24 +110,59 @@ class Board {
         gui.add(board);
     }
 
+    public JLabel getAntsCounter() {
+        return antsCounter;
+    }
+
+    public JLabel getLeavesCounter() {
+        return leavesCounter;
+    }
+
     private void setToolbar() {
         tools = new JToolBar();
         tools.setFloatable(false);
         gui.add(tools, BorderLayout.PAGE_START);
         buttonAddAnt =new JButton("Spawn Ant");
+        communicationLabel=new JLabel("");
+        leavesCounter=new JLabel("");
+        antsCounter=new JLabel("");
+        timeCounter=new JLabel("");
+        buttonStartAgain=new JButton("Start again");
+
         tools.add(buttonAddAnt);
+        tools.addSeparator();
+        tools.add(leavesCounter);
+        tools.addSeparator();
+        tools.add(antsCounter);
+        tools.addSeparator();
+        tools.add(timeCounter);
+        tools.add(Box.createHorizontalGlue());
+        tools.add(communicationLabel);
+        tools.addSeparator();
+        tools.addSeparator();
+        tools.addSeparator();
+        tools.add(buttonStartAgain);
 
     }
 
-     void showNewTurn() {
+     private void showNewTurn() {
+
         for (int i = 0; i < boardSquares.length; i++) {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
-                squareWithImage(b,objects[i][j]);
-                boardSquares[j][i] = b;
+                squareEmpty(b);
+                boardSquares[i][j]=b;
             }
         }
+
+        for(int i=0;i<objects.length;i++){
+            JLabel b = new JLabel();
+            b.setOpaque(true);
+            squareWithImage(b,objects[i]);
+            boardSquares[objects[i].getY()][objects[i].getX()]=b;
+        }
+
         fillBoard();
     }
 
@@ -127,12 +181,7 @@ class Board {
     }
 
     public  void passObjects(ObjectSquare[] Objects) {
-        for(ObjectSquare obj:Objects) {
-            if (obj != null)
-                objects[obj.getX()][obj.getY()] = obj;
-            else
-                break;
-        }
+        objects=Objects;
         showNewTurn();
     }
 }

@@ -3,19 +3,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Calendar;
 
 
 class MainFrame extends JFrame {
     static final String APP_NAME = "Anthill";
-    static final int DELAY = 2000;
+    static final int DELAY = 200;
     static Anthill anthill;
     static Board b;
     static JFrame f;
+    private int seconds=0;
+    private long millis =0;
+    static LocalTime time;
+    static Timer timerRefresher;
     ActionListener refresh = new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
+            timeManagement();
             nextTurn();
         }
     };
+
+    private void timeManagement() {
+        millis +=DELAY;
+        if(millis %1000==0)
+            seconds++;
+        time= LocalTime.ofSecondOfDay(seconds);
+        b.getTimeCounter().setText(time.toString());
+    }
+
 
     public static void main(String arg[]) {
         fillMaxClass();
@@ -36,30 +53,55 @@ class MainFrame extends JFrame {
         {
             public void actionPerformed(ActionEvent e)
             {
-                if(anthill.getId()<=Max.MAX_ANTS){
+                if(anthill.getId()<Max.MAX_ANTS){
                     anthill.spawnAnt();
-                    System.out.println("Spawnieto mrowke"); //TODO Dorób komunikat że za duzo mrowek
+                    b.getCommunicationLabel().setText("Ant has been spawned");
+                    b.getAntsCounter().setText("Ants:"+anthill.getId());
                 }else
-                    System.out.println("Za dużo mrówek"); //TODO Dorób komunikat że za duzo mrowek
-
-
+                    b.getCommunicationLabel().setText("Too many ants!(Max="+Max.MAX_ANTS+")");
+            }
+        });
+        b.getButtonStartAgain().addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                startAgain();//TODO
             }
         });
 
-        ActionListener taskPerformer = refresh;
-        Timer timer = new Timer(DELAY, taskPerformer);
-        timer.start();
 
+        setTimer();
+    }
 
+    private void setTimer() {
+        ActionListener boardRefresher = refresh;
+        timerRefresher = new Timer(DELAY, boardRefresher);
+        timerRefresher.start();
     }
 
 
     private static void nextTurn() {
-        f.remove(b.getGui());
         anthill.moveAnts();
+        if(anthill.countLeaves()==0){
+            ending();
+
+        }
+        b.getLeavesCounter().setText("Leaves:"+anthill.countLeaves());
+        f.remove(b.getGui());
         b.passObjects(anthill.getCurrentObj());
         f.add(b.getGui());
         f.revalidate();
+    }
+
+    private static void ending() {
+        timerRefresher.stop();
+        JFrame jf=new JFrame();
+        JPanel jp=new JPanel();
+        jp.add(new JLabel("Ant's colledted all leaves! Their time:"+time.toString()));
+        jf.add(jp);
+        jf.setLocationByPlatform(true);
+        jf.pack();
+        jf.setVisible(true);
     }
 
     private static void setJFrame() {
@@ -78,7 +120,7 @@ class MainFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double panelHeight = screenSize.getHeight();
         double panelWidth = screenSize.getWidth();
-        Max.setMax((int) Math.round(panelWidth), (int) Math.round(panelHeight), 20, 300, 30, 15);
+        Max.setMax((int) Math.round(panelWidth), (int) Math.round(panelHeight), 30, 300, 30, 15);
     }
 
 

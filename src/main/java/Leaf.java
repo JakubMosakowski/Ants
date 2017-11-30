@@ -14,7 +14,7 @@ class Leaf extends ObjectSquare{
         ICON = "icons/Leaf.png";
         Random rand = new Random();
         raised=false;
-        for (int i = 0; i < Max.LEAVES; i++) {
+        for (int i = 0; i < Max.LEAVES_USER; i++) {
             x = rand.nextInt(Max.SIZE );
             y = rand.nextInt(Max.SIZE);
         }

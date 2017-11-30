@@ -16,6 +16,12 @@ class Board {
     private JToolBar tools;
     private JButton buttonAddAnt;
 
+    public JButton getButtonOptions() {
+        return buttonOptions;
+    }
+
+    private JButton buttonOptions;
+
     public JButton getButtonStartAgain() {
         return buttonStartAgain;
     }
@@ -128,6 +134,7 @@ class Board {
         antsCounter=new JLabel("");
         timeCounter=new JLabel("");
         buttonStartAgain=new JButton("Start again");
+        buttonOptions=new JButton("Options");
 
         tools.add(buttonAddAnt);
         tools.addSeparator();
@@ -140,6 +147,8 @@ class Board {
         tools.add(communicationLabel);
         tools.addSeparator();
         tools.addSeparator();
+        tools.addSeparator();
+        tools.add(buttonOptions);
         tools.addSeparator();
         tools.add(buttonStartAgain);
 
@@ -159,10 +168,15 @@ class Board {
         for(int i=0;i<objects.length;i++){
             JLabel b = new JLabel();
             b.setOpaque(true);
-            squareWithImage(b,objects[i]);
-            boardSquares[objects[i].getY()][objects[i].getX()]=b;
-        }
 
+            squareWithImage(b,objects[i]);
+            //TODO coś nie śmiga
+            if(objects[i].visible)
+            boardSquares[objects[i].getY()][objects[i].getX()]=b;
+
+            System.out.println(i+"|"+objects[i].getClassName()+"|"+objects[i].getX()+"|"+objects[i].getY());
+        }
+         System.out.println();
         fillBoard();
     }
 

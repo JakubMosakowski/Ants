@@ -194,8 +194,7 @@ class Ant extends ObjectSquare {
                 if (ob.getClassName().equals(new Leaf().getClassName())&&
                         ob.visible)
                     return true;
-                else
-                    break;
+
         return false;
     }
 
@@ -234,8 +233,7 @@ class Ant extends ObjectSquare {
                 if (object.getClassName().equals(this.className)
                         || object.getClassName().equals(new Queen().className)) {
                     return false;
-                } else
-                    break;
+                }
             }
         }
 

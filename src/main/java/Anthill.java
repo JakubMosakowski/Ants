@@ -12,8 +12,8 @@ class Anthill {
         return queen;
     }
 
-    protected Ant ants[] = new Ant[Max.MAX_ANTS];
-    protected Leaf leaves[] = new Leaf[Max.LEAVES];
+    protected Ant ants[] = new Ant[Max.MAX_ANTS_USER];
+    protected Leaf leaves[] = new Leaf[Max.LEAVES_USER];
     protected Queen queen;
 
     public int getId() {
@@ -68,7 +68,7 @@ class Anthill {
 
 
     public void spawnLeaves() {
-        for (int i = 0; i < Max.LEAVES; i++) {
+        for (int i = 0; i < Max.LEAVES_USER; i++) {
             leaves[i] = new Leaf();
             passToObjects(leaves[i]);
         }

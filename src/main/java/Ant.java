@@ -2,43 +2,11 @@ import java.util.*;
 
 class Ant extends ObjectSquare {
     protected int move;
-    public final String ICON_WITHOUT_LEAF = "icons/Ant.png";
-    public final String ICON_WITH_LEAF = "icons/AntWithLeaf.png";
-    protected boolean holdsLeaf;
-
-    public int getQueenX() {
-        return queenX;
-    }
-
-    public void setQueenX(int queenX) {
-        this.queenX = queenX;
-    }
-
-    public int getQueenY() {
-        return queenY;
-    }
-
-    public void setQueenY(int queenY) {
-        this.queenY = queenY;
-    }
-
+    private final String ICON_WITHOUT_LEAF = "icons/Ant.png";
+    private final String ICON_WITH_LEAF = "icons/AntWithLeaf.png";
+    private boolean holdsLeaf;
     private int queenX;
     private int queenY;
-
-
-    public void changeHoldingLeaf() {
-
-        holdsLeaf = !holdsLeaf;
-        if (holdsLeaf)
-            ICON = ICON_WITH_LEAF;
-        else
-            ICON = ICON_WITHOUT_LEAF;
-    }
-
-    public int getMove() {
-        return move;
-    }
-
 
     Ant() {
         className = "ant";
@@ -46,6 +14,35 @@ class Ant extends ObjectSquare {
         ICON = ICON_WITHOUT_LEAF;
         setXY();
         setPreXY();
+    }
+
+    Ant(int X, int Y) {
+        className = "ant";
+        holdsLeaf = false;
+        ICON = ICON_WITHOUT_LEAF;
+        x = X;
+        y = Y;
+        setPreXY();
+    }
+
+    public int getQueenX() {
+        return queenX;
+    }
+
+    public int getQueenY() {
+        return queenY;
+    }
+
+    public int getMove() {
+        return move;
+    }
+
+    public void setQueenX(int queenX) {
+        this.queenX = queenX;
+    }
+
+    public void setQueenY(int queenY) {
+        this.queenY = queenY;
     }
 
     private void setPreXY() {
@@ -58,15 +55,13 @@ class Ant extends ObjectSquare {
         y = Max.SIZE / 2;
     }
 
-    Ant(int X, int Y) {
-        className = "ant";
-        holdsLeaf = false;
-        ICON = ICON_WITHOUT_LEAF;
-        x = X;
-        y = Y;
-        setPreXY();
+    public void changeHoldingLeaf() {
+        holdsLeaf = !holdsLeaf;
+        if (holdsLeaf)
+            ICON = ICON_WITH_LEAF;
+        else
+            ICON = ICON_WITHOUT_LEAF;
     }
-
 
     public boolean isHoldingLeaf() {
         return holdsLeaf;
@@ -172,14 +167,13 @@ class Ant extends ObjectSquare {
                     this.changeHoldingLeaf();
                     x = movX;
                     y = movY;
-
                 } else {
                     for (ObjectSquare ob : objects)
                         if (ob.getX() == movX && ob.getY() == movY)
-                            if (ob.getClassName().equals(new Leaf().getClassName()))
-                                    x = movX;
-                                    y = movY;
-
+                            if (ob.getClassName().equals(new Leaf().getClassName())) {
+                                x = movX;
+                                y = movY;
+                            }
                 }
             } else {
                 x = movX;
@@ -191,7 +185,7 @@ class Ant extends ObjectSquare {
     private boolean checkHereIsLeaf(int movX, int movY, ObjectSquare[] objects) {
         for (ObjectSquare ob : objects)
             if (ob.getX() == movX && ob.getY() == movY)
-                if (ob.getClassName().equals(new Leaf().getClassName())&&
+                if (ob.getClassName().equals(new Leaf().getClassName()) &&
                         ob.visible)
                     return true;
 
@@ -239,6 +233,4 @@ class Ant extends ObjectSquare {
 
         return true;
     }
-
-
 }

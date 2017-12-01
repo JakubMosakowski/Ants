@@ -12,40 +12,53 @@ class Board {
     private final JPanel gui = new JPanel(new BorderLayout(3, 3));
     private JLabel[][] boardSquares = new JLabel[Max.SIZE][Max.SIZE];
     private JPanel board;
-    public  ObjectSquare[] objects = new ObjectSquare[Max.FIELDS];
+    private ObjectSquare[] objects = new ObjectSquare[Max.FIELDS];
     private JToolBar tools;
     private JButton buttonAddAnt;
-
-    public JButton getButtonOptions() {
-        return buttonOptions;
-    }
-
     private JButton buttonOptions;
-
-    public JButton getButtonStartAgain() {
-        return buttonStartAgain;
-    }
-
     private JButton buttonStartAgain;
-
-    public JLabel getCommunicationLabel() {
-        return communicationLabel;
-    }
-
     private JLabel antsCounter;
+    private JLabel timeCounter;
+    private JLabel leavesCounter;
+    private JLabel communicationLabel;
+    private ObjectSquare emptyObject = new ObjectSquare();
+
+    Board() {
+        initializeGui();
+    }
 
     public JLabel getTimeCounter() {
         return timeCounter;
     }
 
-    private JLabel timeCounter;
-    private JLabel leavesCounter;
-    private JLabel communicationLabel;
+    public JButton getButtonOptions() {
+        return buttonOptions;
+    }
 
-    private ObjectSquare emptyObject=new ObjectSquare();
+    public JLabel getCommunicationLabel() {
+        return communicationLabel;
+    }
 
-    Board() {
-        initializeGui();
+    public JButton getButtonStartAgain() {
+        return buttonStartAgain;
+    }
+
+    public final JComponent getGui() {
+        return gui;
+    }
+
+    public final JComponent getTools() {
+        return tools;
+    }
+
+    public final JButton getButtonAddAnt() {
+        return buttonAddAnt;
+    }
+
+
+    public void passObjects(ObjectSquare[] Objects) {
+        objects = Objects;
+        showNewTurn();
     }
 
     private final void initializeGui() {
@@ -67,15 +80,16 @@ class Board {
             }
         }
     }
+
     private void squareEmpty(JLabel b) {
         ImageIcon icon = new ImageIcon(
                 new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB));
         b.setIcon(icon);
     }
 
-    private void squareWithImage(JLabel square,ObjectSquare object){
+    private void squareWithImage(JLabel square, ObjectSquare object) {
         BufferedImage image = null;
-        if(!(object.getICON().equals(emptyObject.getICON()))&& object.visible) {
+        if (!(object.getICON().equals(emptyObject.getICON())) && object.visible) {
             try {
                 image = ImageIO.read(ClassLoader.getSystemResourceAsStream(object.getICON()));
             } catch (IOException e) {
@@ -86,7 +100,7 @@ class Board {
             ImageIcon icon = new ImageIcon(image);
             image.flush();
             square.setIcon(icon);
-        }else{
+        } else {
 
             squareEmpty(square);
         }
@@ -94,10 +108,10 @@ class Board {
     }
 
     private BufferedImage rotateImage(BufferedImage image, double degrees) {
-        if(degrees!=0){
-            double radians=Math.toRadians(degrees);
+        if (degrees != 0) {
+            double radians = Math.toRadians(degrees);
             AffineTransform transform = new AffineTransform();
-            transform.rotate(radians, image.getWidth()/2, image.getHeight()/2);
+            transform.rotate(radians, image.getWidth() / 2, image.getHeight() / 2);
             AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
             image = op.filter(image, null);
         }
@@ -128,13 +142,13 @@ class Board {
         tools = new JToolBar();
         tools.setFloatable(false);
         gui.add(tools, BorderLayout.PAGE_START);
-        buttonAddAnt =new JButton("Spawn Ant");
-        communicationLabel=new JLabel("");
-        leavesCounter=new JLabel("");
-        antsCounter=new JLabel("");
-        timeCounter=new JLabel("");
-        buttonStartAgain=new JButton("Start again");
-        buttonOptions=new JButton("Options");
+        buttonAddAnt = new JButton("Spawn Ant");
+        communicationLabel = new JLabel("");
+        leavesCounter = new JLabel("");
+        antsCounter = new JLabel("");
+        timeCounter = new JLabel("");
+        buttonStartAgain = new JButton("Start again");
+        buttonOptions = new JButton("Options");
 
         tools.add(buttonAddAnt);
         tools.addSeparator();
@@ -154,48 +168,26 @@ class Board {
 
     }
 
-     private void showNewTurn() {
+    private void showNewTurn() {
 
         for (int i = 0; i < boardSquares.length; i++) {
             for (int j = 0; j < boardSquares[i].length; j++) {
                 JLabel b = new JLabel();
                 b.setOpaque(true);
                 squareEmpty(b);
-                boardSquares[i][j]=b;
+                boardSquares[i][j] = b;
             }
         }
 
-        for(int i=0;i<objects.length;i++){
+        for (int i = 0; i < objects.length; i++) {
             JLabel b = new JLabel();
             b.setOpaque(true);
 
-            squareWithImage(b,objects[i]);
-            //TODO coś nie śmiga
-            if(objects[i].visible)
-            boardSquares[objects[i].getY()][objects[i].getX()]=b;
+            squareWithImage(b, objects[i]);
+            if (objects[i].visible)
+                boardSquares[objects[i].getY()][objects[i].getX()] = b;
 
-            System.out.println(i+"|"+objects[i].getClassName()+"|"+objects[i].getX()+"|"+objects[i].getY());
         }
-         System.out.println();
         fillBoard();
-    }
-
-
-
-
-
-    public final JComponent getGui() {
-        return gui;
-    }
-    public final JComponent getTools() {
-        return tools;
-    }
-    public final JButton getButtonAddAnt() {
-        return buttonAddAnt;
-    }
-
-    public  void passObjects(ObjectSquare[] Objects) {
-        objects=Objects;
-        showNewTurn();
     }
 }

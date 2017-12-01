@@ -15,14 +15,6 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>3.5.1</version>
-        </dependency>
-    </dependencies>
-
 
     <groupId>com.kuba.ants</groupId>
     <artifactId>Ants</artifactId>

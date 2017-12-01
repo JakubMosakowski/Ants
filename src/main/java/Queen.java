@@ -1,16 +1,17 @@
-public class Queen extends Ant {
+class Queen extends Ant {
 
-    Queen(String queenName){
+    Queen(String queenName) {
         super();
 
-        className ="queen";
-        ICON= "icons/AntQueen.png";
-        name=queenName;
+        className = "queen";
+        ICON = "icons/AntQueen.png";
+        name = queenName;
     }
-    Queen(){
+
+    Queen() {
         super();
-        className ="queen";
-        ICON= "icons/AntQueen.png";
+        className = "queen";
+        ICON = "icons/AntQueen.png";
     }
 
 }

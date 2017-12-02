@@ -52,4 +52,4 @@ To apply changes you have to click the Ok button and start new game e.g. click S
 ## Credits
 Thanks to Weronika Borowczyk for help with documentation.
 
-02.12.2017
+### Date of creation: 02.12.2017

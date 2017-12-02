@@ -11,14 +11,14 @@
 
 "Ants" is a simple program which simulates anthill and ant behaviour. Ants are programmed to move around the board. When the ant moves to the field on which lay a leaf, the leaf is taken by an ant. After that, the leaf is taken to a queen. The game is finished after all leaves are taken by ants.
 <p align="center">
-<a href="url"><img src="https://github.com/JakubMosakowski/Ants/blob/master/Img/3.png" height="600" width="600" ></a>
+<a href="url"><img src="https://github.com/JakubMosakowski/Ants/blob/master/Img/1.png" height="600" width="600" ></a>
  <br/> Filled board
 </p>
 
 ## Usage
 Start program with a jar file. You can start spawning ants with default configuration right away. Just click Spawn Ants button.
 <p align="center">
-<a href="url"><img src="https://github.com/JakubMosakowski/Ants/blob/master/Img/1.png" height="600" width="600" ></a>
+<a href="url"><img src="https://github.com/JakubMosakowski/Ants/blob/master/Img/3.png" height="600" width="600" ></a>
 <br/> Ending
 </p>
 You can also change options by clicking Options' button.
